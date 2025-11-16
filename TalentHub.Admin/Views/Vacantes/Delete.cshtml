@@ -1,0 +1,38 @@
+﻿@model TalentHub.Admin.Models.Vacante
+
+@{
+    ViewData["Title"] = "Eliminar vacante";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Eliminar vacante</h1>
+        <p class="page-header__subtitle">
+            ¿Estás seguro de que deseas eliminar esta vacante interna?
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <dl class="row">
+        <dt class="col-sm-3">Título</dt>
+        <dd class="col-sm-9">@Model.Titulo</dd>
+
+        <dt class="col-sm-3">Área</dt>
+        <dd class="col-sm-9">@Model.Area</dd>
+
+        <dt class="col-sm-3">Ubicación</dt>
+        <dd class="col-sm-9">@Model.Ubicacion</dd>
+
+        <dt class="col-sm-3">Estado</dt>
+        <dd class="col-sm-9">@Model.Estado</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post" class="form" style="margin-top: 1.5rem;">
+        <input type="hidden" asp-for="Id" />
+        <div class="form__actions">
+            <button type="submit" class="btn btn--danger">Sí, eliminar</button>
+            <a asp-action="Index" class="btn btn--ghost">Cancelar</a>
+        </div>
+    </form>
+</div>

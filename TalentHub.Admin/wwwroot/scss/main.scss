@@ -1,0 +1,483 @@
+﻿// ======================================================
+// TalentHub Admin - main.scss (versión simplificada)
+// Paleta azul claro (light) y azul/gris (dark)
+// ======================================================
+
+// ---------- Variables SCSS ----------
+$font-family-base: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+$radius-base: 8px;
+$shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.06);
+
+// ---------- CSS Variables (tema claro por defecto) ----------
+:root {
+    --color-primary: #1A73E8;
+    --color-primary-soft: #E3F2FF;
+    --color-primary-dark: #0C3C78;
+    --color-bg: #E5F0FF; // fondo general azulito claro
+    --color-bg-card: #FFFFFF; // tarjetas
+    --color-surface: #FFFFFF; // navbar / cajas claras
+    --color-border: #D0E2FF;
+    --color-text: #111827;
+    --color-text-light: #6B7280;
+    --color-muted: #6B7280;
+}
+
+/* Tema oscuro: se aplica cuando el body tiene class="theme-dark" */
+.theme-dark {
+    --color-primary: #60A5FA;
+    --color-primary-soft: rgba(37, 99, 235, 0.18);
+    --color-primary-dark: #1D4ED8;
+    --color-bg: #020617; // casi negro azulado
+    --color-bg-card: #020617;
+    --color-surface: #0B1120;
+    --color-border: #1E293B;
+    --color-text: #E5E7EB;
+    --color-text-light: #9CA3AF;
+    --color-muted: #9CA3AF;
+}
+
+// ======================================================
+// Mixins
+// ======================================================
+@mixin flex-center($justify: center, $align: center, $gap: 0) {
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    gap: $gap;
+}
+
+// ======================================================
+// Reset básico
+// ======================================================
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: $font-family-base;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+// ======================================================
+// Layout principal
+// ======================================================
+.layout {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+.layout__main {
+    padding: 1.5rem;
+}
+
+.layout__content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    gap: 1.5rem;
+}
+
+// ======================================================
+// Navbar
+// ======================================================
+.navbar {
+    @include flex-center(space-between, center);
+    padding: 0.75rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+
+    &__left {
+        @include flex-center(flex-start, center, 0.75rem);
+    }
+
+    &__brand {
+        @include flex-center(flex-start, center, 0.75rem);
+    }
+
+    &__logo {
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        background-color: var(--color-primary);
+        color: #fff;
+        font-weight: 700;
+        @include flex-center(center, center);
+        font-size: 0.9rem;
+    }
+
+    &__title {
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    &__links {
+        @include flex-center(flex-end, center, 1rem);
+    }
+
+    &__link {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.6rem;
+        border-radius: $radius-base;
+        color: var(--color-text-light);
+        transition: background-color 0.2s ease, color 0.2s ease;
+
+        &:hover {
+            background-color: var(--color-primary-soft);
+            color: #0C3C78;
+        }
+
+        &--primary {
+            background-color: var(--color-primary);
+            color: #fff;
+            padding: 0.4rem 0.9rem;
+            box-shadow: $shadow-soft;
+
+            &:hover {
+                background-color: var(--color-primary-dark);
+                color: #fff;
+            }
+        }
+    }
+
+    &__theme-btn {
+        margin-right: 0.75rem;
+        border: 1px solid var(--color-border);
+        background-color: var(--color-surface);
+        border-radius: 999px;
+        padding: 0.3rem 0.55rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+    }
+}
+
+.theme-dark .navbar__link {
+    color: var(--color-text-light);
+}
+
+// ======================================================
+// Cards y footer
+// ======================================================
+.card {
+    background-color: var(--color-bg-card);
+    border-radius: $radius-base;
+    padding: 1.5rem;
+    box-shadow: $shadow-soft;
+    border: 1px solid var(--color-border);
+}
+
+.card__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.card__subtitle {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+}
+
+.layout__footer {
+    border-top: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    padding: 0.75rem 1.5rem;
+
+    .footer__text {
+        font-size: 0.8rem;
+        text-align: center;
+        color: var(--color-text-light);
+    }
+}
+
+// ======================================================
+// Dashboard / grids
+// ======================================================
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+    gap: 1.5rem;
+
+    @media (max-width: 900px) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.stat-card {
+    @extend .card;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+
+    .stat-card__value {
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+
+    .stat-card__label {
+        font-size: 0.85rem;
+        color: var(--color-text-light);
+    }
+}
+
+// ======================================================
+// Botones
+// ======================================================
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn--primary {
+    background-color: var(--color-primary);
+    color: #ffffff;
+    border: none;
+    box-shadow: $shadow-soft;
+
+    &:hover {
+        background-color: var(--color-primary-dark);
+        color: #ffffff;
+    }
+}
+
+.btn--ghost {
+    background-color: transparent;
+    border: 1px solid rgba(26, 115, 232, 0.35);
+    color: var(--color-primary);
+
+    &:hover {
+        background-color: var(--color-primary-soft);
+        border-color: var(--color-primary-dark);
+        color: var(--color-primary-dark);
+    }
+}
+
+.btn--danger {
+    background-color: #FEE2E2;
+    color: #B91C1C;
+    border: 1px solid #FCA5A5;
+
+    &:hover {
+        background-color: #EF4444;
+        color: #ffffff;
+        border-color: #B91C1C;
+    }
+}
+
+// ======================================================
+// Page header
+// ======================================================
+.page-header {
+    @include flex-center(space-between, center, 1rem);
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.page-header__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.page-header__title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.page-header__subtitle {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+}
+
+// ======================================================
+// Tablas (vacantes + genéricas)
+// ======================================================
+.vacantes-table {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.vacantes-table__row {
+    display: grid;
+    grid-template-columns: minmax(120px, 2fr) repeat(4, minmax(90px, 1.1fr)) minmax(140px, 1.4fr);
+    align-items: center;
+    padding: 0.6rem 0.75rem;
+    border-radius: $radius-base;
+
+    span {
+        font-size: 0.85rem;
+    }
+}
+
+.vacantes-table__row--header {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--color-text-light);
+}
+
+.vacantes-table__row:not(.vacantes-table__row--header) {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+}
+
+.vacantes-table__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.vacantes-table__actions-title {
+    text-align: right;
+}
+
+/* Tablas genéricas reutilizando los estilos de vacantes */
+.data-table {
+    @extend .vacantes-table;
+}
+
+.data-table__row {
+    @extend .vacantes-table__row;
+}
+
+.data-table__row--header {
+    @extend .vacantes-table__row--header;
+}
+
+.data-table__actions {
+    @extend .vacantes-table__actions;
+}
+
+.data-table__actions-title {
+    @extend .vacantes-table__actions-title;
+}
+
+/* Ajuste solo para la tabla de empleados */
+.empleados-table .data-table__row {
+    grid-template-columns: 1.6fr 1fr 1.8fr 1.1fr 1.1fr 1.2fr 1.4fr;
+}
+
+// ======================================================
+// Badges
+// ======================================================
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+    font-size: 0.75rem;
+    border: 1px solid transparent;
+}
+
+.badge--state {
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary);
+}
+
+// ======================================================
+// Formularios
+// ======================================================
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.form__input {
+    padding: 0.5rem 0.8rem;
+    border-radius: $radius-base;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    font-size: 0.9rem;
+
+    &:focus {
+        border-color: var(--color-primary);
+        outline: none;
+    }
+}
+
+.form__actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+// ======================================================
+// Responsive
+// ======================================================
+@media (max-width: 768px) {
+    .navbar__links {
+        // si quieres luego se hace menú hamburguesa
+        display: none;
+    }
+
+    .layout__main {
+        padding: 1rem;
+    }
+}
+
+/* Tablas responsive: escondemos columnas en pantallas pequeñas */
+@media (max-width: 900px) {
+    .vacantes-table__row,
+    .vacantes-table__row--header,
+    .data-table__row,
+    .data-table__row--header {
+        grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+        row-gap: 0.25rem;
+
+        span:nth-child(2),
+        span:nth-child(3),
+        span:nth-child(4),
+        span:nth-child(5) {
+            display: none;
+        }
+
+        .vacantes-table__actions,
+        .vacantes-table__actions-title,
+        .data-table__actions,
+        .data-table__actions-title {
+            justify-content: flex-start;
+            text-align: left;
+        }
+    }
+}

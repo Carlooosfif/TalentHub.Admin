@@ -1,0 +1,52 @@
+﻿@model IEnumerable<TalentHub.Admin.Models.Vacante>
+
+@{
+    ViewData["Title"] = "Vacantes";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Vacantes internas</h1>
+        <p class="page-header__subtitle">
+            Estas vacantes serán evaluadas por el core para sugerir talento interno.
+        </p>
+    </div>
+
+    <div>
+        <a asp-action="Create" class="btn btn--primary">+ Nueva vacante</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="vacantes-table data-table">
+        <!-- Encabezado -->
+        <div class="data-table__row data-table__row--header">
+            <span>Título</span>
+            <span>Área</span>
+            <span>Ubicación</span>
+            <span>Estado</span>
+            <span>Publicación</span>
+            <span class="data-table__actions-title">Acciones</span>
+        </div>
+
+        @foreach (var v in Model)
+        {
+            <div class="data-table__row">
+                <span>@v.Titulo</span>
+                <span>@v.Area</span>
+                <span>@v.Ubicacion</span>
+                <span>
+                    <span class="badge badge--state">@v.Estado</span>
+                </span>
+                <span>@v.FechaPublicacion.ToString("dd/MM/yyyy")</span>
+                <span>
+                    <div class="data-table__actions">
+                        <a asp-action="Details" asp-route-id="@v.Id" class="btn btn--ghost">Ver</a>
+                        <a asp-action="Edit" asp-route-id="@v.Id" class="btn btn--ghost">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@v.Id" class="btn btn--danger">Eliminar</a>
+                    </div>
+                </span>
+            </div>
+        }
+    </div>
+</div>

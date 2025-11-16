@@ -1,0 +1,29 @@
+﻿@model TalentHub.Admin.Models.Area
+
+@{
+    ViewData["Title"] = "Detalle de área";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Detalle de área</h1>
+        <p class="page-header__subtitle">
+            Información de la área seleccionada.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <dl class="row">
+        <dt class="col-sm-3">Id</dt>
+        <dd class="col-sm-9">@Model.Id</dd>
+
+        <dt class="col-sm-3">Nombre</dt>
+        <dd class="col-sm-9">@Model.Nombre</dd>
+    </dl>
+
+    <div class="form__actions" style="margin-top: 1.5rem;">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn--primary">Editar</a>
+        <a asp-action="Index" class="btn btn--ghost">Volver al listado</a>
+    </div>
+</div>

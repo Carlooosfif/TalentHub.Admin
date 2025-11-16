@@ -1,0 +1,50 @@
+﻿@model IEnumerable<TalentHub.Admin.Models.Empleado>
+
+@{
+    ViewData["Title"] = "Empleados";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Empleados</h1>
+        <p class="page-header__subtitle">
+            Base de datos de colaboradores que alimentan el algoritmo 50/50 de talento interno.
+        </p>
+    </div>
+
+    <div>
+        <a asp-action="Create" class="btn btn--primary">+ Nuevo empleado</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="data-table empleados-table">
+        <div class="data-table__row data-table__row--header">
+            <span>Nombre completo</span>
+            <span>Cédula</span>
+            <span>Correo</span>
+            <span>Fecha ingreso</span>
+            <span>Área</span>
+            <span>Supervisor</span>
+            <span class="data-table__actions-title">Acciones</span>
+        </div>
+
+        @foreach (var emp in Model)
+        {
+            <div class="data-table__row">
+                <span>@emp.NombreCompleto</span>
+                <span>@emp.Cedula</span>
+                <span>@emp.Correo</span>
+                <span>@emp.FechaIngreso.ToString("dd/MM/yyyy")</span>
+                <span>@emp.Area?.Nombre</span>
+                <span>@emp.Supervisor?.NombreCompleto</span>
+                <span>
+                    <div class="data-table__actions">
+                        <a asp-action="Edit" asp-route-id="@emp.Id" class="btn btn--ghost">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@emp.Id" class="btn btn--danger">Eliminar</a>
+                    </div>
+                </span>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,40 @@
+﻿@model TalentHub.Admin.Models.Vacante
+
+@{
+    ViewData["Title"] = "Detalle de vacante";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Detalle de vacante</h1>
+        <p class="page-header__subtitle">
+            Información de la vacante interna seleccionada.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <dl class="row">
+        <dt class="col-sm-3">Título</dt>
+        <dd class="col-sm-9">@Model.Titulo</dd>
+
+        <dt class="col-sm-3">Área</dt>
+        <dd class="col-sm-9">@Model.Area</dd>
+
+        <dt class="col-sm-3">Ubicación</dt>
+        <dd class="col-sm-9">@Model.Ubicacion</dd>
+
+        <dt class="col-sm-3">Estado</dt>
+        <dd class="col-sm-9">
+            <span class="badge badge--state">@Model.Estado</span>
+        </dd>
+
+        <dt class="col-sm-3">Fecha de publicación</dt>
+        <dd class="col-sm-9">@Model.FechaPublicacion.ToString("dd/MM/yyyy")</dd>
+    </dl>
+
+    <div class="form__actions" style="margin-top: 1.5rem;">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn--primary">Editar</a>
+        <a asp-action="Index" class="btn btn--ghost">Volver al listado</a>
+    </div>
+</div>

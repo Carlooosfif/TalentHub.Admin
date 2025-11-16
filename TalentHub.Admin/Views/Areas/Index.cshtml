@@ -1,0 +1,40 @@
+﻿@model IEnumerable<TalentHub.Admin.Models.Area>
+
+@{
+    ViewData["Title"] = "Áreas";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Áreas</h1>
+        <p class="page-header__subtitle">
+            Estructura básica de la organización. Estas áreas se usan para vincular supervisores y empleados.
+        </p>
+    </div>
+
+    <div>
+        <a asp-action="Create" class="btn btn--primary">+ Nueva área</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="data-table">
+        <div class="data-table__row data-table__row--header">
+            <span>Nombre</span>
+            <span class="data-table__actions-title">Acciones</span>
+        </div>
+
+        @foreach (var area in Model)
+        {
+            <div class="data-table__row">
+                <span>@area.Nombre</span>
+                <span>
+                    <div class="data-table__actions">
+                        <a asp-action="Edit" asp-route-id="@area.Id" class="btn btn--ghost">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@area.Id" class="btn btn--danger">Eliminar</a>
+                    </div>
+                </span>
+            </div>
+        }
+    </div>
+</div>

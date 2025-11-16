@@ -1,0 +1,55 @@
+﻿@model TalentHub.Admin.Models.Vacante
+
+@{
+    ViewData["Title"] = "Editar vacante";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Editar vacante</h1>
+        <p class="page-header__subtitle">
+            Actualiza la información de la vacante interna.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <form asp-action="Edit" method="post" class="form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form__group">
+            <label asp-for="Titulo"></label>
+            <input asp-for="Titulo" class="form__input" />
+            <span asp-validation-for="Titulo" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="Area"></label>
+            <input asp-for="Area" class="form__input" />
+            <span asp-validation-for="Area" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="Ubicacion"></label>
+            <input asp-for="Ubicacion" class="form__input" />
+            <span asp-validation-for="Ubicacion" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="Estado"></label>
+            <input asp-for="Estado" class="form__input" />
+            <span asp-validation-for="Estado" class="text-danger"></span>
+        </div>
+
+        <div class="form__actions">
+            <button type="submit" class="btn btn--primary">Guardar cambios</button>
+            <a asp-action="Index" class="btn btn--ghost">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

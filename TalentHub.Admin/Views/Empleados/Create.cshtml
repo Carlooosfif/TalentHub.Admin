@@ -1,0 +1,128 @@
+﻿@model TalentHub.Admin.Models.Empleado
+@using TalentHub.Admin.Models
+
+@{
+    ViewData["Title"] = "Nuevo empleado";
+    var areas = ViewBag.Areas as IEnumerable<Area> ?? Enumerable.Empty<Area>();
+    var supervisores = ViewBag.Supervisores as IEnumerable<Supervisor> ?? Enumerable.Empty<Supervisor>();
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Crear empleado</h1>
+        <p class="page-header__subtitle">
+            Registra un nuevo colaborador con su área y supervisor. Esta información se usará para la recomendación de talento interno.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <form asp-action="Create" method="post" class="form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form__group">
+            <label asp-for="NombreCompleto"></label>
+            <input asp-for="NombreCompleto" class="form__input" />
+            <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="Cedula"></label>
+            <input asp-for="Cedula" class="form__input" />
+            <span asp-validation-for="Cedula" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="Correo"></label>
+            <input asp-for="Correo" class="form__input" />
+            <span asp-validation-for="Correo" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="FechaIngreso"></label>
+            <input asp-for="FechaIngreso" class="form__input" type="date" />
+            <span asp-validation-for="FechaIngreso" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="AreaId"></label>
+            <select asp-for="AreaId" class="form__input" id="AreaId">
+                <option value="">-- Selecciona un área --</option>
+                @foreach (var area in areas)
+                {
+                    <option value="@area.Id">@area.Nombre</option>
+                }
+            </select>
+            <span asp-validation-for="AreaId" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="SupervisorId"></label>
+            <select asp-for="SupervisorId" class="form__input" id="SupervisorId">
+                <option value="">-- Selecciona primero un área --</option>
+                @foreach (var sup in supervisores)
+                {
+                    <option value="@sup.Id">@sup.NombreCompleto</option>
+                }
+            </select>
+            <span asp-validation-for="SupervisorId" class="text-danger"></span>
+        </div>
+
+        <div class="form__actions">
+            <button type="submit" class="btn btn--primary">Guardar</button>
+            <a asp-action="Index" class="btn btn--ghost">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Cargar supervisores según el área seleccionada
+        const areaSelect = document.getElementById("AreaId");
+        const supervisorSelect = document.getElementById("SupervisorId");
+
+        if (areaSelect) {
+            areaSelect.addEventListener("change", () => {
+                const areaId = areaSelect.value;
+
+                // Limpiar supervisores actuales
+                supervisorSelect.innerHTML = "";
+                const placeholder = document.createElement("option");
+                placeholder.value = "";
+                placeholder.textContent = areaId
+                    ? "Cargando supervisores..."
+                    : "-- Selecciona primero un área --";
+                supervisorSelect.appendChild(placeholder);
+
+                if (!areaId) return;
+
+                fetch(`/Supervisores/GetByArea?areaId=${areaId}`)
+                    .then(resp => resp.json())
+                    .then(data => {
+                        supervisorSelect.innerHTML = "";
+                        const optDefault = document.createElement("option");
+                        optDefault.value = "";
+                        optDefault.textContent = "-- Selecciona un supervisor --";
+                        supervisorSelect.appendChild(optDefault);
+
+                        data.forEach(sup => {
+                            const opt = document.createElement("option");
+                            opt.value = sup.id;
+                            opt.textContent = sup.nombreCompleto;
+                            supervisorSelect.appendChild(opt);
+                        });
+                    })
+                    .catch(err => {
+                        console.error("Error cargando supervisores:", err);
+                        supervisorSelect.innerHTML = "";
+                        const optError = document.createElement("option");
+                        optError.value = "";
+                        optError.textContent = "Error al cargar supervisores";
+                        supervisorSelect.appendChild(optError);
+                    });
+            });
+        }
+    </script>
+}

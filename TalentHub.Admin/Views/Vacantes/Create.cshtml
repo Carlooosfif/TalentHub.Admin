@@ -1,0 +1,51 @@
+﻿@model TalentHub.Admin.Models.Vacante
+
+@{
+    ViewData["Title"] = "Nueva vacante";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Crear vacante</h1>
+        <p class="page-header__subtitle">
+            Publica una nueva vacante interna que utilizará el algoritmo de recomendación.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <form asp-action="Create" method="post" class="form">
+        <div class="form__group">
+            <label for="Titulo">Título</label>
+            <input asp-for="Titulo" class="form__input" />
+            <span asp-validation-for="Titulo" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label for="Area">Área</label>
+            <input asp-for="Area" class="form__input" />
+            <span asp-validation-for="Area" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label for="Ubicacion">Ubicación</label>
+            <input asp-for="Ubicacion" class="form__input" />
+            <span asp-validation-for="Ubicacion" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label for="Estado">Estado</label>
+            <input asp-for="Estado" class="form__input" />
+            <span asp-validation-for="Estado" class="text-danger"></span>
+        </div>
+
+        <div class="form__actions">
+            <button type="submit" class="btn btn--primary">Guardar</button>
+            <a asp-action="Index" class="btn btn--ghost">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

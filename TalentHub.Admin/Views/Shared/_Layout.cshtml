@@ -1,0 +1,117 @@
+﻿@{
+    Layout = null;
+    var title = ViewData["Title"] as string ?? "TalentHub Admin";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>@title - TalentHub</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Bootstrap (si lo sigues usando) -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Tus estilos -->
+    <link rel="stylesheet" href="~/css/main.css" />
+</head>
+<body>
+    <div class="layout">
+        <!-- NAVBAR -->
+        <header class="navbar">
+            <div class="navbar__left">
+                <div class="navbar__brand">
+                    <div class="navbar__logo">TH</div>
+                    <div>
+                        <div class="navbar__title">TalentHub Admin</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navbar__links">
+                <button id="themeToggle" class="navbar__theme-btn" type="button">
+                    🌙 / ☀️
+                </button>
+
+                <a asp-controller="Home" asp-action="Index" class="navbar__link">Inicio</a>
+                <a asp-controller="Areas" asp-action="Index" class="navbar__link">Áreas</a>
+                <a asp-controller="Supervisores" asp-action="Index" class="navbar__link">Supervisores</a>
+                <a asp-controller="Empleados" asp-action="Index" class="navbar__link">Empleados</a>
+                <a asp-controller="Vacantes" asp-action="Index" class="navbar__link navbar__link--primary">
+                    Vacantes
+                </a>
+            </div>
+        </header>
+
+        <!-- CONTENIDO -->
+        <main class="layout__main">
+            <section class="layout__content">
+                @RenderBody()
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="layout__footer">
+            <p class="footer__text">
+                TalentHub · @DateTime.Now.Year · Gestión de talento interno
+            </p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        (function () {
+            const THEME_KEY = "talenthub-theme";
+            const body = document.body;
+
+            function applyTheme(theme) {
+                body.classList.remove("theme-light", "theme-dark");
+                body.classList.add(theme);
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                // 1) Leer tema guardado
+                let savedTheme = localStorage.getItem(THEME_KEY);
+
+                // 2) Si no hay nada guardado, usamos preferencia del sistema
+                if (savedTheme !== "theme-light" && savedTheme !== "theme-dark") {
+                    const prefersDark = window.matchMedia &&
+                        window.matchMedia("(prefers-color-scheme: dark)").matches;
+                    savedTheme = prefersDark ? "theme-dark" : "theme-light";
+                }
+
+                applyTheme(savedTheme);
+
+                const btn = document.getElementById("themeToggle");
+                if (!btn) return;
+
+                // Opcional: cambia el icono del botón según el tema
+                function updateButton(theme) {
+                    if (theme === "theme-dark") {
+                        btn.textContent = "🌙 / ☀️";
+                    } else {
+                        btn.textContent = "🌞 / 🌜";
+                    }
+                }
+
+                updateButton(savedTheme);
+
+                btn.addEventListener("click", function () {
+                    const newTheme = body.classList.contains("theme-dark")
+                        ? "theme-light"
+                        : "theme-dark";
+
+                    applyTheme(newTheme);
+                    localStorage.setItem(THEME_KEY, newTheme);
+                    updateButton(newTheme);
+                });
+            });
+        })();
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

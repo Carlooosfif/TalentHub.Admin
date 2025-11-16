@@ -1,0 +1,35 @@
+﻿@model TalentHub.Admin.Models.Area
+
+@{
+    ViewData["Title"] = "Nueva área";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Crear área</h1>
+        <p class="page-header__subtitle">
+            Registra una nueva área para asociar supervisores y empleados.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <form asp-action="Create" method="post" class="form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form__group">
+            <label asp-for="Nombre"></label>
+            <input asp-for="Nombre" class="form__input" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+
+        <div class="form__actions">
+            <button type="submit" class="btn btn--primary">Guardar</button>
+            <a asp-action="Index" class="btn btn--ghost">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

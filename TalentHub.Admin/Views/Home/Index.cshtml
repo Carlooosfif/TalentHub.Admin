@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Panel principal";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Panel de administración</h1>
+        <p class="page-header__subtitle">
+            Administra áreas, supervisores, empleados y vacantes para el algoritmo de recomendación de talento interno.
+        </p>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <!-- Columna izquierda -->
+    <div class="card">
+        <h2 class="card__title">Gestión de datos clave</h2>
+        <p class="card__subtitle">
+            Estos módulos alimentan el core de TalentHub (empleados, supervisores y áreas).
+        </p>
+
+        <div class="stats-grid" style="margin-top: 1rem;">
+            <div class="stat-card">
+                <div class="stat-card__value">Áreas</div>
+                <div class="stat-card__label">Estructura organizacional</div>
+                <a asp-controller="Areas" asp-action="Index" class="btn btn--ghost" style="margin-top: .5rem;">
+                    Ver áreas
+                </a>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card__value">Supervisores</div>
+                <div class="stat-card__label">Validan el desempeño</div>
+                <a asp-controller="Supervisores" asp-action="Index" class="btn btn--ghost" style="margin-top: .5rem;">
+                    Ver supervisores
+                </a>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card__value">Empleados</div>
+                <div class="stat-card__label">Base del algoritmo 50/50</div>
+                <a asp-controller="Empleados" asp-action="Index" class="btn btn--ghost" style="margin-top: .5rem;">
+                    Ver empleados
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Columna derecha -->
+    <div class="card">
+        <h2 class="card__title">Vacantes internas</h2>
+        <p class="card__subtitle">
+            Publica vacantes para activar la recomendación automática de talento interno.
+        </p>
+
+        <div style="margin-top: 1rem;">
+            <a asp-controller="Vacantes" asp-action="Index" class="btn btn--primary">
+                Administrar vacantes
+            </a>
+        </div>
+    </div>
+</div>

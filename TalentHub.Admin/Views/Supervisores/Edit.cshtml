@@ -1,0 +1,46 @@
+﻿@model TalentHub.Admin.Models.Supervisor
+
+@{
+    ViewData["Title"] = "Editar supervisor";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Editar supervisor</h1>
+        <p class="page-header__subtitle">
+            Actualiza los datos del supervisor y su área.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <form asp-action="Edit" method="post" class="form">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form__group">
+            <label asp-for="NombreCompleto"></label>
+            <input asp-for="NombreCompleto" class="form__input" />
+            <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="AreaId"></label>
+            <select asp-for="AreaId" asp-items="ViewBag.Areas" class="form__input">
+                <option value="">-- Selecciona un área --</option>
+            </select>
+            <span asp-validation-for="AreaId" class="text-danger"></span>
+        </div>
+
+        <div class="form__actions">
+            <button type="submit" class="btn btn--primary">Guardar cambios</button>
+            <a asp-action="Index" class="btn btn--ghost">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

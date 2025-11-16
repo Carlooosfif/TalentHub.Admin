@@ -1,0 +1,42 @@
+﻿@model IEnumerable<TalentHub.Admin.Models.Supervisor>
+
+@{
+    ViewData["Title"] = "Supervisores";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Supervisores</h1>
+        <p class="page-header__subtitle">
+            Cada supervisor se asocia a un área y puede tener empleados a cargo.
+        </p>
+    </div>
+
+    <div>
+        <a asp-action="Create" class="btn btn--primary">+ Nuevo supervisor</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="data-table">
+        <div class="data-table__row data-table__row--header">
+            <span>Nombre completo</span>
+            <span>Área</span>
+            <span class="data-table__actions-title">Acciones</span>
+        </div>
+
+        @foreach (var sup in Model)
+        {
+            <div class="data-table__row">
+                <span>@sup.NombreCompleto</span>
+                <span>@sup.Area?.Nombre</span>
+                <span>
+                    <div class="data-table__actions">
+                        <a asp-action="Edit" asp-route-id="@sup.Id" class="btn btn--ghost">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@sup.Id" class="btn btn--danger">Eliminar</a>
+                    </div>
+                </span>
+            </div>
+        }
+    </div>
+</div>
