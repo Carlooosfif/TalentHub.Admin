@@ -1,0 +1,42 @@
+﻿@model IEnumerable<TalentHub.Admin.Models.RecomendacionEmpleadoViewModel>
+
+@{
+    var vacante = ViewBag.Vacante as TalentHub.Admin.Models.Vacante;
+    ViewData["Title"] = "Recomendaciones para vacante";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">
+            Recomendaciones - @vacante?.Titulo
+        </h1>
+        <p class="page-header__subtitle">
+            Empleados del área @vacante?.Area ordenados por score del supervisor.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="data-table">
+        <div class="data-table__row data-table__row--header">
+            <span>Empleado</span>
+            <span>Cédula</span>
+            <span>Correo</span>
+            <span>Score supervisor</span>
+        </div>
+
+        @foreach (var item in Model)
+        {
+            <div class="data-table__row">
+                <span>@item.NombreCompleto</span>
+                <span>@item.Cedula</span>
+                <span>@item.Correo</span>
+                <span>
+                    @(item.ScoreSupervisor.HasValue
+                        ? item.ScoreSupervisor.Value.ToString()
+                        : "Sin evaluar")
+                </span>
+            </div>
+        }
+    </div>
+</div>

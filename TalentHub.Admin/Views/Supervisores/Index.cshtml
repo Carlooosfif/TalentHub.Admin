@@ -32,8 +32,15 @@
                 <span>@sup.Area?.Nombre</span>
                 <span>
                     <div class="data-table__actions">
+                        <a asp-action="Details" asp-route-id="@sup.Id" class="btn btn--ghost">Ver</a>
                         <a asp-action="Edit" asp-route-id="@sup.Id" class="btn btn--ghost">Editar</a>
                         <a asp-action="Delete" asp-route-id="@sup.Id" class="btn btn--danger">Eliminar</a>
+
+                        <a asp-action="Evaluar"
+                           asp-route-id="@sup.Id"
+                           class="btn btn--primary">
+                            Evaluar equipo
+                        </a>
                     </div>
                 </span>
             </div>

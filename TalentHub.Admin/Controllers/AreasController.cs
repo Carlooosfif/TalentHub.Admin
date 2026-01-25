@@ -5,11 +5,13 @@ using TalentHub.Admin.Models;
 
 namespace TalentHub.Admin.Controllers
 {
-    public class AreasController : Controller
+    public class AreasController : BaseController
     {
         // GET: Areas
         public IActionResult Index()
         {
+            var r = Proteger();
+            if (r != null) return r;
             List<Area> areas = new();
 
             using (var conn = SqlHelper.GetConnection())

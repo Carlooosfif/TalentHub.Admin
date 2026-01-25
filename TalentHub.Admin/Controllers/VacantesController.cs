@@ -1,16 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using TalentHub.Admin.Data;
 using TalentHub.Admin.Models;
 
 namespace TalentHub.Admin.Controllers
 {
-    public class VacantesController : Controller
+    public class VacantesController : BaseController
     {
         public IActionResult Index()
         {
+            var r = Proteger();
+            if (r != null) return r;
             List<Vacante> vacantes = new();
 
             using (var conn = SqlHelper.GetConnection())
@@ -45,6 +47,7 @@ namespace TalentHub.Admin.Controllers
 
         public IActionResult Create()
         {
+            ViewBag.Areas = GetAreasSelectList();
             return View();
         }
 
@@ -54,6 +57,7 @@ namespace TalentHub.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.Areas = GetAreasSelectList();
                 return View(model);
             }
 
@@ -93,6 +97,7 @@ namespace TalentHub.Admin.Controllers
             var vacante = GetVacante(id);
             if (vacante == null) return NotFound();
 
+            ViewBag.Areas = GetAreasSelectList();
             return View(vacante);
         }
 
@@ -102,6 +107,7 @@ namespace TalentHub.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.Areas = GetAreasSelectList();
                 return View(model);
             }
 
@@ -163,6 +169,33 @@ namespace TalentHub.Admin.Controllers
         // =========================
         // MÉTODOS AUXILIARES
         // =========================
+
+        private List<SelectListItem> GetAreasSelectList()
+        {
+            var lista = new List<SelectListItem>();
+
+            using (var conn = SqlHelper.GetConnection())
+            {
+                conn.Open();
+                string sql = "SELECT Id, Nombre FROM Areas ORDER BY Nombre";
+
+                using (var cmd = new SqlCommand(sql, conn))
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add(new SelectListItem
+                        {
+                            Value = reader["Nombre"].ToString(),  // guardamos el NOMBRE
+                            Text = reader["Nombre"].ToString()
+                        });
+                    }
+                }
+            }
+
+            return lista;
+        }
+
 
         private Vacante? GetVacante(int id)
         {

@@ -1,6 +1,11 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http
+
+@{
     Layout = null;
     var title = ViewData["Title"] as string ?? "TalentHub Admin";
+    var rol = Context.Session.GetString("Rol");
+    var email = Context.Session.GetString("Email");
+    var haySesion = !string.IsNullOrEmpty(rol);
 }
 
 <!DOCTYPE html>
@@ -11,14 +16,15 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Bootstrap (si lo sigues usando) -->
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 
-    <!-- Tus estilos -->
+    <!-- Estilos propios -->
     <link rel="stylesheet" href="~/css/main.css" />
 </head>
 <body>
     <div class="layout">
+
         <!-- NAVBAR -->
         <header class="navbar">
             <div class="navbar__left">
@@ -26,6 +32,12 @@
                     <div class="navbar__logo">TH</div>
                     <div>
                         <div class="navbar__title">TalentHub Admin</div>
+                        @if (haySesion)
+                        {
+                            <small class="text-muted">
+                                @email (@rol)
+                            </small>
+                        }
                     </div>
                 </div>
             </div>
@@ -35,13 +47,23 @@
                     🌙 / ☀️
                 </button>
 
-                <a asp-controller="Home" asp-action="Index" class="navbar__link">Inicio</a>
-                <a asp-controller="Areas" asp-action="Index" class="navbar__link">Áreas</a>
-                <a asp-controller="Supervisores" asp-action="Index" class="navbar__link">Supervisores</a>
-                <a asp-controller="Empleados" asp-action="Index" class="navbar__link">Empleados</a>
-                <a asp-controller="Vacantes" asp-action="Index" class="navbar__link navbar__link--primary">
-                    Vacantes
-                </a>
+                @if (haySesion)
+                {
+                    <a asp-controller="Home" asp-action="Index" class="navbar__link">Inicio</a>
+                    <a asp-controller="Areas" asp-action="Index" class="navbar__link">Áreas</a>
+                    <a asp-controller="Supervisores" asp-action="Index" class="navbar__link">Supervisores</a>
+                    <a asp-controller="Empleados" asp-action="Index" class="navbar__link">Empleados</a>
+                    <a asp-controller="Vacantes" asp-action="Index" class="navbar__link navbar__link--primary">
+                        Vacantes
+                    </a>
+
+                    <!-- Cerrar sesión -->
+                    <a asp-controller="Account"
+                       asp-action="Logout"
+                       class="navbar__link text-danger">
+                        Cerrar sesión
+                    </a>
+                }
             </div>
         </header>
 
@@ -74,10 +96,8 @@
             }
 
             document.addEventListener("DOMContentLoaded", function () {
-                // 1) Leer tema guardado
                 let savedTheme = localStorage.getItem(THEME_KEY);
 
-                // 2) Si no hay nada guardado, usamos preferencia del sistema
                 if (savedTheme !== "theme-light" && savedTheme !== "theme-dark") {
                     const prefersDark = window.matchMedia &&
                         window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -89,13 +109,8 @@
                 const btn = document.getElementById("themeToggle");
                 if (!btn) return;
 
-                // Opcional: cambia el icono del botón según el tema
                 function updateButton(theme) {
-                    if (theme === "theme-dark") {
-                        btn.textContent = "🌙 / ☀️";
-                    } else {
-                        btn.textContent = "🌞 / 🌜";
-                    }
+                    btn.textContent = theme === "theme-dark" ? "🌙 / ☀️" : "🌞 / 🌜";
                 }
 
                 updateButton(savedTheme);
@@ -112,6 +127,7 @@
             });
         })();
     </script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

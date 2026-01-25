@@ -1,0 +1,41 @@
+﻿@model TalentHub.Admin.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Iniciar sesión</h1>
+        <p class="page-header__subtitle">
+            Ingresa con tu usuario de RRHH o supervisor.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <form asp-action="Login" method="post" class="form">
+        @Html.AntiForgeryToken()
+
+        <div class="form__group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" class="form__input" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" class="form__input" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form__actions">
+            <button type="submit" class="btn btn--primary">Entrar</button>
+            <a asp-action="Register" class="btn btn--ghost">Registrarme</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

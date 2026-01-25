@@ -36,5 +36,12 @@
     <div class="form__actions" style="margin-top: 1.5rem;">
         <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn--primary">Editar</a>
         <a asp-action="Index" class="btn btn--ghost">Volver al listado</a>
+
+        <a asp-controller="Recomendaciones"
+           asp-action="Index"
+           asp-route-vacanteId="@Model.Id"
+           class="btn btn--primary">
+            Ver ranking de talento interno
+        </a>
     </div>
 </div>

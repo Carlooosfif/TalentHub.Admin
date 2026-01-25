@@ -22,8 +22,12 @@
         </div>
 
         <div class="form__group">
-            <label for="Area">Área</label>
-            <input asp-for="Area" class="form__input" />
+            <label asp-for="Area"></label>
+            <select asp-for="Area"
+                    asp-items="@(ViewBag.Areas as List<SelectListItem>)"
+                    class="form__input">
+                <option value="">-- Selecciona un área --</option>
+            </select>
             <span asp-validation-for="Area" class="text-danger"></span>
         </div>
 

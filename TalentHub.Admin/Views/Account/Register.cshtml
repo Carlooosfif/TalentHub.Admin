@@ -1,0 +1,67 @@
+﻿@model TalentHub.Admin.Models.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Registro de usuario";
+    var supervisores = ViewBag.Supervisores as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>;
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">Registro</h1>
+        <p class="page-header__subtitle">
+            Crea un usuario para RRHH (Admin) o Supervisor.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <form asp-action="Register" method="post" class="form">
+        @Html.AntiForgeryToken()
+
+        <div class="form__group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" class="form__input" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" class="form__input" type="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="ConfirmPassword"></label>
+            <input asp-for="ConfirmPassword" class="form__input" type="password" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="Rol"></label>
+            <select asp-for="Rol" class="form__input">
+                <option value="Admin">Admin (RRHH)</option>
+                <option value="Supervisor">Supervisor</option>
+            </select>
+            <span asp-validation-for="Rol" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="SupervisorId"></label>
+            <select asp-for="SupervisorId"
+                    asp-items="supervisores"
+                    class="form__input">
+                <option value="">-- Selecciona supervisor (solo si rol = Supervisor) --</option>
+            </select>
+            <span asp-validation-for="SupervisorId" class="text-danger"></span>
+        </div>
+
+        <div class="form__actions">
+            <button type="submit" class="btn btn--primary">Registrarme</button>
+            <a asp-action="Login" class="btn btn--ghost">Ir a login</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

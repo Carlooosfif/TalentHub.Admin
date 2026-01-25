@@ -1,0 +1,53 @@
+﻿@model IEnumerable<TalentHub.Admin.Models.RecomendacionEmpleadoViewModel>
+
+@{
+    var supervisor = ViewBag.Supervisor as TalentHub.Admin.Models.Supervisor;
+    ViewData["Title"] = "Evaluar equipo";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">
+            Evaluaciones - @supervisor?.NombreCompleto
+        </h1>
+        <p class="page-header__subtitle">
+            Lista de empleados a cargo del supervisor, con su score actual.
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="data-table">
+        <div class="data-table__row data-table__row--header">
+            <span>Empleado</span>
+            <span>Cédula</span>
+            <span>Correo</span>
+            <span>Score supervisor</span>
+            <span class="data-table__actions-title">Acciones</span>
+        </div>
+
+        @foreach (var item in Model)
+        {
+            <div class="data-table__row">
+                <span>@item.NombreCompleto</span>
+                <span>@item.Cedula</span>
+                <span>@item.Correo</span>
+                <span>
+                    @(item.ScoreSupervisor.HasValue
+                        ? item.ScoreSupervisor.Value.ToString()
+                        : "Sin evaluar")
+                </span>
+                <span>
+                    <div class="data-table__actions">
+                        <a asp-action="EditEvaluacion"
+                           asp-route-supervisorId="@supervisor!.Id"
+                           asp-route-empleadoId="@item.EmpleadoId"
+                           class="btn btn--ghost">
+                            Evaluar / Editar
+                        </a>
+                    </div>
+                </span>
+            </div>
+        }
+    </div>
+</div>

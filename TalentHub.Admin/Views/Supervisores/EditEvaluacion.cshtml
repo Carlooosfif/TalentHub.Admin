@@ -1,0 +1,52 @@
+﻿@model TalentHub.Admin.Models.EvaluacionVacante
+
+@{
+    var supervisor = ViewBag.Supervisor as TalentHub.Admin.Models.Supervisor;
+    var empleado = ViewBag.Empleado as TalentHub.Admin.Models.Empleado;
+    ViewData["Title"] = "Evaluar empleado";
+}
+
+<div class="page-header">
+    <div class="page-header__info">
+        <h1 class="page-header__title">
+            Evaluar @empleado?.NombreCompleto
+        </h1>
+        <p class="page-header__subtitle">
+            Supervisor: @supervisor?.NombreCompleto
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <form asp-action="EditEvaluacion" method="post" class="form">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="SupervisorId" />
+        <input type="hidden" asp-for="EmpleadoId" />
+
+        <div class="form__group">
+            <label asp-for="ScoreSupervisor"></label>
+            <input asp-for="ScoreSupervisor" class="form__input" type="number" min="0" max="100" />
+            <span asp-validation-for="ScoreSupervisor" class="text-danger"></span>
+        </div>
+
+        <div class="form__group">
+            <label asp-for="Comentarios"></label>
+            <textarea asp-for="Comentarios" class="form__input" rows="4"></textarea>
+            <span asp-validation-for="Comentarios" class="text-danger"></span>
+        </div>
+
+        <div class="form__actions">
+            <button type="submit" class="btn btn--primary">Guardar</button>
+            <a asp-action="Evaluar"
+               asp-route-id="@supervisor!.Id"
+               class="btn btn--ghost">
+                Volver al listado
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
