@@ -1,0 +1,3 @@
+React: talenthub-recomendaciones.vercel.app
+Mvc: https://talenthub-admin-carlos.azurewebsites.net
+Api MVC: https://talenthub-admin-carlos.azurewebsites.net/api/vacantes/1/recomendaciones

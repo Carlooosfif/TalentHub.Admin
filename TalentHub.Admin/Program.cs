@@ -66,6 +66,18 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReact",
+        policy =>
+        {
+            policy
+                .WithOrigins("https://talenthub-recomendaciones.vercel.app")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 
 var app = builder.Build();
 
@@ -83,6 +95,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseCors("ReactPolicy");
+app.UseCors("AllowReact");
+
 // ⚠️ Session SIEMPRE antes de endpoints
 app.UseSession();
 
