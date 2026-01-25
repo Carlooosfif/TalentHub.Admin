@@ -1,146 +1,203 @@
-# TalentHub Admin (MVC)
+Ôªø# TalentHub ‚Äì Sistema de Recomendaci√≥n de Talento Interno
 
-Proyecto de administraciÛn desarrollado en ASP.NET Core MVC que alimenta el core de recomendaciÛn de talento interno.  
-El objetivo del admin es gestionar la informaciÛn base que utilizar· un sistema central (core) para sugerir candidatos internos a vacantes.
+TalentHub es un sistema desarrollado en **ASP.NET Core MVC** que permite administrar informaci√≥n organizacional y exponer un **API REST (JSON)** para soportar un **core de recomendaci√≥n de talento interno**, el cual es consumido por un aplicativo frontend desarrollado en **React**.
 
-## 1. DescripciÛn general
+El proyecto aplica principios de **ingenier√≠a de software**, **SOLID**, **patrones de dise√±o** y separaci√≥n por capas, como parte del proceso de dise√±o de ingenier√≠a (UDLA‚ÄìABET).
 
-El sistema permite administrar:
+---
 
-- ¡reas
-- Supervisores
-- Empleados
-- Vacantes internas
+## 1. Descripci√≥n general del proyecto
 
-Esta informaciÛn se guarda en una base de datos SQL Server y se expone a travÈs de una interfaz MVC con vistas Razor y estilos en SCSS/CSS.
+El sistema se divide en dos componentes principales:
 
-El proyecto est· pensado como la "capa de administraciÛn" que alimenta un core de negocio orientado a recomendar talento interno para vacantes.
+1. **TalentHub.Admin (ASP.NET Core MVC)**  
+   Aplicaci√≥n administrativa encargada de gestionar:
+   - √Åreas
+   - Supervisores
+   - Empleados
+   - Vacantes internas
+   - Evaluaciones de supervisores
 
-## 2. TecnologÌas utilizadas
+2. **TalentHub Recomendaciones (React)**  
+   Aplicaci√≥n frontend que consume el API REST para visualizar el ranking de empleados recomendados para una vacante espec√≠fica.
 
-- .NET 8 / ASP.NET Core MVC
+La informaci√≥n se almacena en una base de datos **SQL Server**, y el backend expone los datos necesarios en formato **JSON** para su consumo externo.
+
+---
+
+## 2. Arquitectura general
+
+El proyecto sigue una arquitectura por capas:
+
+- **Controllers**
+- **Services**
+- **Repositories**
+- **Strategies**
+- **Models**
+- **API REST**
+- **Frontend React**
+
+Se aplican los siguientes principios y patrones:
+
+### Principios SOLID
+- **Single Responsibility Principle (SRP)**  
+  Separaci√≥n clara entre controladores, servicios, repositorios y estrategias.
+- **Dependency Inversion Principle (DIP)**  
+  Uso de interfaces e inyecci√≥n de dependencias en `Program.cs`.
+
+### Patrones de dise√±o
+- **Repository Pattern**: acceso a datos desacoplado.
+- **Strategy Pattern**: c√°lculo flexible del puntaje de recomendaci√≥n.
+
+---
+
+## 3. Tecnolog√≠as utilizadas
+
+### Backend
+- .NET 8
+- ASP.NET Core MVC
 - C#
 - SQL Server
-- ADO.NET con `SqlConnection` y `SqlCommand` (clase `SqlHelper`)
-- HTML + Razor
-- SCSS (compilado a CSS)
-- Bootstrap (parcialmente)
+- ADO.NET (`SqlConnection`, `SqlCommand`)
+- Inyecci√≥n de dependencias nativa
+- API REST (JSON)
 
-## 3. Modelo de datos (tablas principales)
+### Frontend
+- React
+- JavaScript (ES6+)
+- Fetch API
+- HTML + CSS
 
-Base de datos: `TalentHubDb`
+### Otros
+- Git / GitHub
+- Azure App Service (deploy backend)
+- Vercel (deploy frontend React)
+
+---
+
+## 4. Modelo de datos
+
+Base de datos: **TalentHubDb**
 
 Tablas principales:
 
-- `Areas`
-  - `Id` (PK)
-  - `Nombre`
+### Areas
+- `Id` (PK)
+- `Nombre`
 
-- `Supervisores`
-  - `Id` (PK)
-  - `NombreCompleto`
-  - `AreaId` (FK a `Areas.Id`)
+### Supervisores
+- `Id` (PK)
+- `NombreCompleto`
+- `AreaId` (FK ‚Üí Areas)
 
-- `Empleados`
-  - `Id` (PK)
-  - `NombreCompleto`
-  - `Cedula`
-  - `Correo`
-  - `FechaIngreso`
-  - `AreaId` (FK a `Areas.Id`)
-  - `SupervisorId` (FK a `Supervisores.Id`)
+### Empleados
+- `Id` (PK)
+- `NombreCompleto`
+- `Cedula`
+- `Correo`
+- `FechaIngreso`
+- `AreaId` (FK ‚Üí Areas)
+- `SupervisorId` (FK ‚Üí Supervisores)
 
-- `Vacantes`
-  - `Id` (PK)
-  - `Titulo`
-  - `Area`
-  - `Ubicacion`
-  - `Estado`
-  - `FechaPublicacion`
+### Vacantes
+- `Id` (PK)
+- `Titulo`
+- `Area`
+- `Ubicacion`
+- `Estado`
+- `FechaPublicacion`
 
-Los scripts de creaciÛn de tablas se encuentran en el archivo SQL del proyecto (por ejemplo, `Database.sql` o similar).
+### EvaluacionesVacante
+- `Id`
+- `EmpleadoId`
+- `SupervisorId`
+- `ScoreSupervisor`
+- `Comentarios`
+- `FechaEvaluacion`
 
-## 4. CaracterÌsticas importantes para la tarea
+---
 
-### 4.1. ValidaciÛn de dato sensible en Back-End (cÈdula)
+## 5. API REST
 
-La cÈdula del empleado se considera un dato sensible para el core.  
-Por este motivo:
+### Endpoint principal
 
-- Se valida en el controlador `EmpleadosController`, en las acciones `Create` y `Edit`.
-- La cÈdula debe:
-  - Tener exactamente 10 dÌgitos.
-  - Ser ˙nica en la tabla `Empleados`.
+```http
+GET /api/vacantes/{vacanteId}/recomendaciones
+Respuesta (JSON)
+[
+  {
+    "empleadoId": 1,
+    "nombreCompleto": "Juan Perez",
+    "correo": "juan@empresa.com",
+    "scoreSupervisor": 80
+  }
+]
 
-Si la cÈdula no cumple las reglas, se agrega un error al `ModelState` y el registro no se guarda en la base de datos.
+El ranking se calcula din√°micamente utilizando m√∫ltiples estrategias de puntuaci√≥n (Strategy Pattern).
 
-Esto garantiza que, aunque el usuario deshabilite JavaScript o modifique el formulario en el navegador, el servidor no aceptar· cÈdulas inv·lidas ni duplicadas.
 
-### 4.2. Uso de dropdowns con referencia a otras tablas
+## 6. Estructura del repositorio
 
-Para evitar ingresar claves for·neas manualmente, el proyecto implementa dropdowns dependientes.  
-Un ejemplo es el formulario de creaciÛn de empleados:
+TalentHub.Admin/
+‚îú‚îÄ‚îÄ TalentHub.Admin              # Backend MVC + API
+‚îú‚îÄ‚îÄ TalentHub.Admin.Test         # Pruebas unitarias
+‚îú‚îÄ‚îÄ talenthub-recomendaciones    # Frontend React
+‚îú‚îÄ‚îÄ DOCUMENTO.docx               # Documento de dise√±o de ingenier√≠a
+‚îú‚îÄ‚îÄ PruebaFuncional.docx         # Evidencia de prueba funcional
+‚îú‚îÄ‚îÄ TalentHub.Admin.sln
+‚îî‚îÄ‚îÄ README.md
 
-- El usuario selecciona un **¡rea** desde un dropdown poblado desde la tabla `Areas`.
-- En base al ·rea seleccionada, se llama a un endpoint que devuelve los **Supervisores** de esa ·rea.
-- El dropdown de **Supervisor** se llena din·micamente con esos datos.
+## 7. Ejecuci√≥n del proyecto en local
 
-De esta manera:
+### 7.1 Requisitos
 
-- No se ingresa el `AreaId` ni el `SupervisorId` a mano.
-- Se respeta la relaciÛn entre tablas y se guÌa al usuario a elegir valores v·lidos.
+Visual Studio 2022 o superior
+.NET SDK 8
+SQL Server (LocalDB o instancia completa)
+Node.js (v18 o superior)
+Git
 
-## 5. Estructura del proyecto
-
-Estructura general:
-
-- `Controllers/`
-  - `HomeController.cs`
-  - `AreasController.cs`
-  - `SupervisoresController.cs`
-  - `EmpleadosController.cs`
-  - `VacantesController.cs`
-- `Models/`
-  - `Area.cs`
-  - `Supervisor.cs`
-  - `Empleado.cs`
-  - `Vacante.cs`
-  - `DashboardViewModel.cs` (modelo para el panel principal)
-- `Data/`
-  - `SqlHelper.cs` (clase est·tica para obtener conexiones a SQL)
-- `Views/`
-  - `Shared/_Layout.cshtml`
-  - `Home/Index.cshtml` (panel principal con mÈtricas e ˙ltimas vacantes)
-  - Carpeta de vistas para cada entidad (¡reas, Supervisores, Empleados, Vacantes)
-- `wwwroot/`
-  - `css/main.css`
-  - `scss/main.scss`
-  - librerÌas est·ticas (Bootstrap, etc.)
-
-## 6. Panel principal (Home)
-
-La pantalla de inicio (`Home/Index`) funciona como un dashboard:
-
-- Muestra contadores:
-  - Total de ·reas
-  - Total de supervisores
-  - Total de empleados
-  - Total de vacantes
-- Muestra una tabla con las ˙ltimas vacantes registradas en la base de datos.
-
-Los datos se obtienen desde SQL utilizando `SqlHelper` en el `HomeController`.
-
-## 7. CÛmo ejecutar el proyecto en local
-
-### 7.1. Requisitos
-
-- Visual Studio 2022 (o superior) con carga de trabajo de ASP.NET y desarrollo web.
-- SQL Server (localdb o instancia en equipo).
-- .NET SDK (versiÛn compatible con el proyecto, por ejemplo .NET 8).
-
-### 7.2. Pasos
+### 7.2 Backend (ASP.NET Core MVC)
 
 1. Clonar el repositorio:
 
-   ```bash
-   git clone https://github.com/Carlooosfif/talenthub-admin-mvc.git
+git clone https://github.com/Carlooosfif/TalentHub.Admin.git
+
+2. Abrir la soluci√≥n:
+
+TalentHub.Admin.sln
+
+3. Configurar la cadena de conexi√≥n en appsettings.json.
+
+4. Crear la base de datos y tablas usando el script SQL del proyecto.
+
+5. Ejecutar el proyecto desde Visual Studio.
+
+El backend quedar√° disponible en:
+
+https://localhost:{puerto}
+
+### 7.3 Frontend (React)
+
+1. Ir a la carpeta:
+cd talenthub-recomendaciones
+
+2. Instalar dependencias:
+npm install
+
+3. Configurar la URL del API en el archivo de servicios (fetch).
+
+4.Ejecutar el proyecto:
+npm start
+
+La aplicaci√≥n React quedar√° disponible en:
+http://localhost:3000
+
+## 8. Pruebas
+
+Prueba unitaria:
+Implementada sobre las estrategias de c√°lculo de score usando xUnit.
+
+Prueba funcional:
+Documento incluido con evidencia de ejecuci√≥n del sistema completo.
+
